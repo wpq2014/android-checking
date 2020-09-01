@@ -1,0 +1,44 @@
+rootProject.name='android-check-sdks'
+include ':app'
+
+gradle.ext.tinkerEnable = false
+gradle.ext.isReleaseBuild = false
+
+gradle.addBuildListener(new BuildListener() {
+    void buildStarted(Gradle gradle) {
+        println '开始构建'
+    }
+
+    void settingsEvaluated(Settings settings) {
+        println 'settings评估完成（settings.gradle中代码执行完毕）'
+        println settings.getStartParameter().toString()
+        settings.getStartParameter().getTaskNames().each {
+            if (it == "assembleRelease" || it == "installRelease") {
+                gradle.ext.tinkerEnable = true
+                gradle.ext.isReleaseBuild = true
+            } else if (it == "assembleReleaseTest" || it == "installReleaseTest") {
+                gradle.ext.tinkerEnable = true
+                gradle.ext.isReleaseBuild = true
+            } else if (it == "assemblePreRelease" || it == "installPreRelease") {
+                gradle.ext.tinkerEnable = true
+                gradle.ext.isReleaseBuild = true
+            } else {
+                gradle.ext.tinkerEnable = false
+                gradle.ext.isReleaseBuild = false
+            }
+        }
+    }
+
+    void projectsLoaded(Gradle gradle) {
+        println '项目结构加载完成（初始化阶段结束）'
+        println '初始化结束，可访问根项目：' + gradle.gradle.rootProject
+    }
+
+    void projectsEvaluated(Gradle gradle) {
+        println '所有项目评估完成（配置阶段结束）'
+    }
+
+    void buildFinished(BuildResult result) {
+        println '构建结束 '
+    }
+})

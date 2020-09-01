@@ -1,0 +1,97 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
+if (gradle.ext.tinkerEnable) {
+    // 热修复
+//    apply from: 'tinker-support.gradle'
+
+    // 神策，debug不开启，编译太慢，如需开启移出去即可
+    apply plugin: 'com.sensorsdata.analytics.android'
+//    sensorsAnalytics {
+//        exclude = ['com.bun.miitmdid'] // exclude oaid
+//    }
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId "com.wpq.android.check"
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
+
+        ndk {
+            //设置支持的SO库架构
+            abiFilters 'armeabi-v7a' //, 'x86', 'x86_64', 'arm64-v8a'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    // https://stackoverflow.com/questions/56748334/how-to-get-viewmodel-by-viewmodels-fragment-ktx
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        // true--错误发生后停止gradle构建
+        abortOnError false
+        // true--显示错误的所有发生位置，不截取
+        showAll true
+    }
+
+    packagingOptions {
+//        doNotStrip "*/armeabi-v7a/*.so"
+//        doNotStrip "*/armeabi/*.so"
+//        doNotStrip "*/arm64-v8a/*.so"
+        doNotStrip "*/armeabi-v7a/libdu.so"
+        doNotStrip "*/armeabi/libdu.so"
+
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/LGPL2.1'
+    }
+
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    implementation("androidx.appcompat:appcompat:$rootProject.appcompatVersion") {
+        force = true
+    }
+    implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintVersion"
+
+    // 神策 https://github.com/sensorsdata/sa-sdk-android/releases
+    implementation 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:4.2.5'
+}

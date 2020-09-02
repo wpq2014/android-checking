@@ -1,13 +1,14 @@
-package com.wpq.android.check
+package com.wpq.checking
 
 import android.app.Application
 import android.content.Context
+import java.util.logging.Logger
 
 /**
  * @author wupuquan
  * @date 2020/9/1 19:08
  */
-class CheckApp : Application() {
+class MyApp : Application() {
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
@@ -15,5 +16,7 @@ class CheckApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+
     }
 }

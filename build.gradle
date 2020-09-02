@@ -17,8 +17,8 @@ buildscript {
         jcenter()
 //        mavenLocal()
 
-        // 神策
-        maven { url 'https://dl.bintray.com/zouyuhan/maven' }
+        // 友盟 https://developer.umeng.com/docs/128606/detail/129620
+        maven { url 'https://dl.bintray.com/umsdk/release' }
     }
 
     dependencies {
@@ -46,6 +46,9 @@ allprojects {
         jcenter()
         maven { url "https://jitpack.io" }
 //        mavenLocal()
+
+        // 友盟 https://developer.umeng.com/docs/128606/detail/129620
+        maven { url 'https://dl.bintray.com/umsdk/release' }
     }
 
     // https://www.jb51.net/article/136538.htm
